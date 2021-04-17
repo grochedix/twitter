@@ -17,17 +17,33 @@
   </head>
   
   <body>
+    {% load static %}
 
     {% block navbar %}
-    <nav class="navbar navbar-light" style="background-color: rgb(29, 161, 242);">
+    <nav class="navbar sticky-top navbar-light" style="max-height: 10vh; box-shadow: 2px 2px 15px #1DA1F2;">
         <div class="container-fluid">
-
+          <a class="navbar-brand" href={% url 'home' %}>
+            <img src="{% static 'tweetApp/logo.png' %}" style="height: 30px;" alt="logo">
+          </a>
+          
+          <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search on Twitter..." aria-label="Search" autofocus>
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+          {% if user.is_authenticated %}
+          <span class="navbar-text">Welcome {{user.username}}, what's on your mind today?</span>
+          {% else %}
+          <div>
+            <button type="button" class="btn btn-outline-info" style="width: 100px;">Login</button>
+            <button type="button" class="btn btn-outline-info" style="width: 100px; margin-left: 15px;">Register</button>
+          </div>
+          {% endif %}
         </div>
       </nav>
     {% endblock %}
 
     {% block main %}
-        <h1>Hello, world!</h1>
+        
     {% endblock %}
    
   </body>
