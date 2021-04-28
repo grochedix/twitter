@@ -26,7 +26,7 @@
             <img src="{% static 'tweetApp/logo.png' %}" style="height: 30px;" alt="logo">
           </a>
           
-          <form class="d-flex">
+          <form class="d-flex" >
             <input class="form-control me-2" type="search" placeholder="Search on Twitter..." aria-label="Search" autofocus>
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
@@ -34,12 +34,102 @@
           <span class="navbar-text">Welcome {{user.username}}, what's on your mind today?</span>
           {% else %}
           <div>
-            <button type="button" class="btn btn-outline-info" style="width: 100px;">Login</button>
-            <button type="button" class="btn btn-outline-info" style="width: 100px; margin-left: 15px;">Register</button>
+            <button type="button" class="btn btn-outline-info" style="width: 100px;" data-bs-toggle="modal" data-bs-target="#LoginModal">
+              Login
+            </button>
+            <button type="button" class="btn btn-outline-info" style="width: 100px; margin-left: 15px;" data-bs-toggle="modal" data-bs-target="#RegistrationModal">
+              Register
+            </button>
           </div>
           {% endif %}
         </div>
       </nav>
+
+      <!-- Registration Modal -->
+      <div class="modal fade" id="RegistrationModal" tabindex="-1" aria-labelledby="registrationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Register</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="registerForm" method="post">
+              {% csrf_token %}
+              <div class="modal-body">
+                {{ form.non_field_errors }}
+                <div class="form-floating mb-3">
+                    {{ registration_form.username.errors }}
+                    <input class="form-control" id="{{ registration_form.username.id_for_label }}" name="username" placeholder="username">
+                    <label for="{{ registration_form.username.id_for_label }}">Username:</label>
+                </div>
+                <div class="form-floating mb-3">
+                  {{ registration_form.email.errors }}
+                  <input type="email" class="form-control" id="{{ registration_form.email.id_for_label }}" name="email" placeholder="email">
+                  <label for="{{ registration_form.email.id_for_label }}">Email:</label>
+                </div>
+                <div class="form-floating mb-3">
+                  {{ registration_form.password.errors }}
+                  <input type="password" class="form-control" id="password1" name="password1" placeholder="password">
+                  <label for="{{ registration_form.password.id_for_label }}">Password:</label>
+                </div>
+                <div class="form-floating mb-3">
+                  {{ registration_form.password.errors }}
+                  <input type="password" class="form-control" id="password2" name="password2" placeholder="password2">
+                  <label for="password_conf">Password Confirmation:</label>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Register</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Login Modal -->
+      <div class="modal fade" id="LoginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post">
+              {% csrf_token %}
+              <div class="modal-body">
+                <div class="form-floating mb-3">
+                  <input class="form-control" id="login_username" name="username" placeholder="username">
+                  <label for="login_username">Username:</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="password" class="form-control" id="login_password" name="password" placeholder="password">
+                  <label for="login_password">Password:</label>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Login</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <script type="module">
+        var registerModal = document.getElementById('RegistrationModal')
+        var registeInput = document.getElementById('{{ registration_form.username.id_for_label }}')
+        registerModal.addEventListener('shown.bs.modal', function () {
+          registeInput.focus()
+        })
+
+        var loginModal = document.getElementById('LoginModal')
+        var loginInput = document.getElementById('login_username')
+        loginModal.addEventListener('shown.bs.modal', function () {
+          loginInput.focus()
+        })
+      </script>
+    <script src="{% static 'tweetApp/utils.js' %}"></script>
     {% endblock %}
 
     {% block main %}
