@@ -31,7 +31,13 @@
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
           {% if user.is_authenticated %}
-          <span class="navbar-text">Welcome {{user.username}}, what's on your mind today?</span>
+          <div class="navbar-text">Welcome <b>{{user.username}}</b>, what's on your mind today?</div>
+          <div>
+            <form action="/logout/" method="POST">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-outline-danger">Logout</button>
+            </form>
+          </div>
           {% else %}
           <div>
             <button type="button" class="btn btn-outline-info" style="width: 100px;" data-bs-toggle="modal" data-bs-target="#LoginModal">
@@ -55,25 +61,20 @@
             </div>
             <form id="registerForm" method="post">
               {% csrf_token %}
-              <div class="modal-body">
-                {{ form.non_field_errors }}
-                <div class="form-floating mb-3">
-                    {{ registration_form.username.errors }}
+              <div class="modal-body" id="register_body">
+                <div class="form-floating mb-3" >
                     <input class="form-control" id="{{ registration_form.username.id_for_label }}" name="username" placeholder="username">
                     <label for="{{ registration_form.username.id_for_label }}">Username:</label>
                 </div>
                 <div class="form-floating mb-3">
-                  {{ registration_form.email.errors }}
                   <input type="email" class="form-control" id="{{ registration_form.email.id_for_label }}" name="email" placeholder="email">
                   <label for="{{ registration_form.email.id_for_label }}">Email:</label>
                 </div>
                 <div class="form-floating mb-3">
-                  {{ registration_form.password.errors }}
                   <input type="password" class="form-control" id="password1" name="password1" placeholder="password">
                   <label for="{{ registration_form.password.id_for_label }}">Password:</label>
                 </div>
                 <div class="form-floating mb-3">
-                  {{ registration_form.password.errors }}
                   <input type="password" class="form-control" id="password2" name="password2" placeholder="password2">
                   <label for="password_conf">Password Confirmation:</label>
                 </div>
@@ -96,7 +97,7 @@
               <h5 class="modal-title" id="exampleModalLabel">Login</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post">
+            <form method="post" id="loginForm">
               {% csrf_token %}
               <div class="modal-body">
                 <div class="form-floating mb-3">

@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.http import (HttpResponse, HttpResponseBadRequest,
                          HttpResponseRedirect, JsonResponse)
 from django.shortcuts import redirect
@@ -23,20 +23,27 @@ class HomePageView(TemplateView):
 
 @require_POST
 def loginView(request):
-    user = authenticate(request.POST)
-    if user is not None:
-        login(request, user)
-        return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
-    else:
-        return JsonResponse({'error': "Wrong Authentication"})
+    if request.is_ajax():
+        data = json.loads(request.body)
+        user = authenticate(**data)
+        if user is not None:
+            login(request, user)
+            return JsonResponse({'error': 'None'}, status=200)
+        else:
+            return JsonResponse({'error': "The combination of Username/Password is not correct."}, status=400)
+
+@require_POST
+def logout_view(request):
+    logout(request)
+    return redirect('home')
 
 @require_POST
 def registerView(request):
-    if request.method == "POST" and request.is_ajax():
+    if request.is_ajax():
         data = json.loads(request.body)
         form = RegisterForm(data)
         if form.is_valid():
+            form.save()
             return JsonResponse({'error': 'None'}, status=200)
         else:
             return JsonResponse({'error': form.errors}, status=400)
-    return redirect('home')
