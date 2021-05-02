@@ -32,7 +32,7 @@
           </form>
           {% if user.is_authenticated %}
           <div class="navbar-text d-sm-none">Welcome <b>{{user.username}}</b>.</div>
-          <div class="navbar-text d-none d-sm-flex">Welcome <b>{{user.username}}</b>, what's on your mind today?</div>
+          <div class="navbar-text d-none d-sm-inline">Welcome <b>{{user.username}}</b>, what's on your mind today?</div>
           
           <div>
             <form action="/logout/" method="POST">
