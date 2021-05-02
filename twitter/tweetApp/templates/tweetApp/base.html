@@ -16,22 +16,24 @@
     <title>Twitter Clone</title>
   </head>
   
-  <body>
+  <body style="height: 100vh; width: 100%;">
     {% load static %}
 
     {% block navbar %}
-    <nav class="navbar sticky-top navbar-light" style="max-height: 10vh; box-shadow: 2px 2px 15px #1DA1F2;">
+    <nav class="navbar fixed-top navbar-light" style="height: 62px; box-shadow: 2px 2px 15px #1DA1F2; opacity: 1; width: 100%; background-color: white;">
         <div class="container-fluid">
           <a class="navbar-brand" href={% url 'home' %}>
             <img src="{% static 'tweetApp/logo.png' %}" style="height: 30px;" alt="logo">
           </a>
           
-          <form class="d-flex" >
+          <form class="d-none d-lg-flex" >
             <input class="form-control me-2" type="search" placeholder="Search on Twitter..." aria-label="Search" autofocus>
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
           {% if user.is_authenticated %}
-          <div class="navbar-text">Welcome <b>{{user.username}}</b>, what's on your mind today?</div>
+          <div class="navbar-text d-sm-none">Welcome <b>{{user.username}}</b>.</div>
+          <div class="navbar-text d-none d-sm-flex">Welcome <b>{{user.username}}</b>, what's on your mind today?</div>
+          
           <div>
             <form action="/logout/" method="POST">
               {% csrf_token %}
