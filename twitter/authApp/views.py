@@ -32,4 +32,3 @@ def registerView(request):
             return JsonResponse({'error': 'None'}, status=200)
         else:
             return JsonResponse({'error': form.errors}, status=400)
-            

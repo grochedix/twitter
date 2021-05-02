@@ -44,7 +44,7 @@ registerForm.addEventListener("submit", async function(event) {
             return response.json();
           }).then(function(data) {
             if (data.error === 'None') {
-                window.location.replace('/home/');
+                window.location.replace('/home/?success_registration=t');
                 return;
             } else {
                 document.getElementById("register_body").insertAdjacentHTML('beforeend', '<div id="registerError"></div>');
