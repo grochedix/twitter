@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 from django.views.generic.edit import UpdateView
+from django.contrib import messages
 
 from .forms import ProfileForm
 
@@ -49,6 +50,11 @@ def profileView(request):
     if request.method == "POST":
         profile_form = ProfileForm(request.POST, instance=request.user.profile)
         if profile_form.is_valid():
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Profil updated.",
+            )
             profile_form.save()
     else:
         profile_form = ProfileForm(instance=request.user.profile)

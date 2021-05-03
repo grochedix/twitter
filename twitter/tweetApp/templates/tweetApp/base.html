@@ -16,8 +16,15 @@
     <title>Twitter Clone</title>
   </head>
   
-  <body style="height: 100%; width: auto;">
+  <body>
     {% load static %}
+
+    {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" style="margin: 10px; max-width: 60%; text-align: center; opacity: 0.8; position: absolute;">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
 
     {% block navbar %}
     <nav class="navbar fixed-top navbar-light" style="height: 62px; box-shadow: 2px 2px 15px #1DA1F2; opacity: 1; width: 100%; background-color: white;">
@@ -31,8 +38,9 @@
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
           {% if user.is_authenticated %}
-          <div class="navbar-text d-sm-none">Welcome <b>{{user.username}}</b>.</div>
-          <div class="navbar-text d-none d-sm-inline">Welcome <b>{{user.username}}</b>, what's on your mind today?</div>
+          <div class="navbar-text d-sm-none">Welcome <a href="{% url 'profile' %}"><b>{{user.username}}</b></a>.</div>
+          <div class="navbar-text d-none d-sm-inline">Welcome <a href="{% url 'profile' %}"><b>{{user.username}}</b></a>
+            , what's on your mind today?</div>
           
           <div>
             <form action="/logout/" method="POST">
