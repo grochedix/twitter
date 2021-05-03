@@ -21,4 +21,10 @@ class HomePageView(TemplateView):
                 messages.SUCCESS,
                 "Successful Registration. You can now login.",
             )
+        elif "next" in self.request.GET:
+            messages.add_message(
+                self.request,
+                messages.WARNING,
+                "You need to be logged in to access to this page.",
+            )
         return context

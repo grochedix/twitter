@@ -59,7 +59,6 @@ registerForm.addEventListener("submit", async function(event) {
                         }}
                   }
             }
-            console.log('Response:', data);
           });
     }
 )
@@ -68,6 +67,9 @@ let loginForm = document.getElementById("loginForm");
 
 loginForm.addEventListener('submit', async event => {
     event.preventDefault();
+    if (document.getElementById("loginError") !== null) {
+        document.getElementById("loginError").remove();
+    }
     data = {
         'username':document.getElementById('login_username').value,
         'password':document.getElementById('login_password').value,
@@ -87,10 +89,17 @@ loginForm.addEventListener('submit', async event => {
         return response.json();
     }).then(function(data) {
     if (data.error === 'None') {
+        let urlParams = new URLSearchParams(window.location.search);
+        let next = urlParams.get('next');
+        if (next !== null) {
+            window.location.replace(next);
+            return
+        }
         window.location.replace('/home/');
         return;
     } else {
-        console.log(data)
+        document.getElementById("login_body").insertAdjacentHTML('beforeend', '<div id="loginError"></div>');
+        document.getElementById("loginError").insertAdjacentHTML('beforeend', `<p style="color:red"><em>${data["error"]}</em></p>` );                               
     }
 })
 })

@@ -2,11 +2,13 @@ import json
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 from django.views.generic.edit import UpdateView
+
+from .forms import ProfileForm
 
 
 @require_POST
@@ -42,5 +44,12 @@ def registerView(request):
             return JsonResponse({"error": form.errors}, status=400)
 
 
-class ProfileUpdateView(LoginRequiredMixin, UpdateView):
-    pass
+@login_required
+def profileView(request):
+    if request.method == "POST":
+        profile_form = ProfileForm(request.POST, instance=request.user.profile)
+        if profile_form.is_valid():
+            profile = profile_form.save()
+    else:
+        profile_form = ProfileForm(instance=request.user.profile)
+    return render(request, "authApp/profile.html", {"form": profile_form})

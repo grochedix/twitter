@@ -16,7 +16,7 @@
     <title>Twitter Clone</title>
   </head>
   
-  <body style="height: 100vh; width: 100%;">
+  <body style="height: 100%; width: auto;">
     {% load static %}
 
     {% block navbar %}
@@ -101,7 +101,7 @@
             </div>
             <form method="post" id="loginForm">
               {% csrf_token %}
-              <div class="modal-body">
+              <div class="modal-body" id="login_body">
                 <div class="form-floating mb-3">
                   <input class="form-control" id="login_username" name="username" placeholder="username">
                   <label for="login_username">Username:</label>
