@@ -49,7 +49,7 @@ def profileView(request):
     if request.method == "POST":
         profile_form = ProfileForm(request.POST, instance=request.user.profile)
         if profile_form.is_valid():
-            profile = profile_form.save()
+            profile_form.save()
     else:
         profile_form = ProfileForm(instance=request.user.profile)
     return render(request, "authApp/profile.html", {"form": profile_form})
