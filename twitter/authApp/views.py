@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.views.decorators.http import require_POST
 
+
 @require_POST
 def loginView(request):
     if request.is_ajax():
@@ -13,14 +14,19 @@ def loginView(request):
         user = authenticate(**data)
         if user is not None:
             login(request, user)
-            return JsonResponse({'error': 'None'}, status=200)
+            return JsonResponse({"error": "None"}, status=200)
         else:
-            return JsonResponse({'error': "The combination of Username/Password is not correct."}, status=400)
+            return JsonResponse(
+                {"error": "The combination of Username/Password is not correct."},
+                status=400,
+            )
+
 
 @require_POST
 def logout_view(request):
     logout(request)
-    return redirect('home')
+    return redirect("home")
+
 
 @require_POST
 def registerView(request):
@@ -29,6 +35,6 @@ def registerView(request):
         form = UserCreationForm(data)
         if form.is_valid():
             form.save()
-            return JsonResponse({'error': 'None'}, status=200)
+            return JsonResponse({"error": "None"}, status=200)
         else:
-            return JsonResponse({'error': form.errors}, status=400)
+            return JsonResponse({"error": form.errors}, status=400)
