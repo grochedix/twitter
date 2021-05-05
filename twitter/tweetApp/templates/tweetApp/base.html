@@ -24,7 +24,7 @@
                 {{ message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            {% endfor %}
+    {% endfor %}
 
     {% block navbar %}
     <nav class="navbar fixed-top navbar-light" style="height: 62px; box-shadow: 2px 2px 15px #1DA1F2; opacity: 1; width: 100%; background-color: white;">
@@ -34,7 +34,7 @@
           </a>
           
           <form class="d-none d-lg-flex" >
-            <input class="form-control me-2" type="search" placeholder="Search on Twitter..." aria-label="Search" autofocus>
+            <input class="form-control me-2" type="search" placeholder="Search on Twitter..." aria-label="Search" >
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
           {% if user.is_authenticated %}

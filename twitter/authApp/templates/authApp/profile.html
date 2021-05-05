@@ -1,34 +1,39 @@
 {% extends "tweetApp/base.html" %}
 
 {% block main %}
-<div class="container-fluid" style="margin-top: 80px; text-align: center;">
-    <div style="display: inline-block;">
-        <form method="POST" action="/profile/">
-            {% csrf_token %}
-            {{ form.non_field_errors }}
-            <div class="form-floating mb-3">
-                {{ form.first_name.errors }}
-                {{ form.first_name }}
-                <label for="{{ form.first_name.id_for_label }}">First Name:</label>
-            </div>
-            <div class="form-floating mb-3">
-                {{ form.last_name.errors }}
-                {{ form.last_name }}
-                <label for="{{ form.last_name.id_for_label }}">Last Name:</label>
-            </div>
-            <div class="form-floating mb-3">
-                {{ form.city.errors }}
-                {{ form.city }}
-                <label for="{{ form.city.id_for_label }}">City:</label>
-            </div>
-            <div class="form-floating mb-3">
-                {{ form.country.errors }}
-                {{ form.country }}
-                <label for="{{ form.country.id_for_label }}">Country:</label>
-            </div>
-            
-        <button type="submit" class="btn btn-secondary">Submit</button>
-        </form>
+<div class="container-fluid" style="margin-top: 20vh; text-align: center;">
+    <div class="row">
+        <div class="col-sm" style="display: inline-block;">
+            <form method="POST" action="/profile/" style="width: 350px; display: inline-block;" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-floating mb-3">
+                    <img src="{{request.user.profile.avatar.url}}" style="height: auto; max-height: 200px; width: auto; max-width: 200px; margin-bottom: 10px;">
+                    <input type="file" name="avatar" accept="image/*" id="id_avatar">
+                </div>
+                {{ form.non_field_errors }}
+                <div class="form-floating mb-3">
+                    {{ form.first_name.errors }}
+                    {{ form.first_name }}
+                    <label for="{{ form.first_name.id_for_label }}">First Name:</label>
+                </div>
+                <div class="form-floating mb-3">
+                    {{ form.last_name.errors }}
+                    {{ form.last_name }}
+                    <label for="{{ form.last_name.id_for_label }}">Last Name:</label>
+                </div>
+                <div class="form-floating mb-3">
+                    {{ form.city.errors }}
+                    {{ form.city }}
+                    <label for="{{ form.city.id_for_label }}">City:</label>
+                </div>
+                <div class="form-floating mb-3">
+                    {{ form.country.errors }}
+                    {{ form.country }}
+                    <label for="{{ form.country.id_for_label }}">Country:</label>
+                </div>
+                
+            <button type="submit" class="btn btn-secondary">Submit</button>
+            </form>
     </div>
 </div>
 {% endblock %}
