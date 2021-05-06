@@ -7,7 +7,7 @@
             <form method="POST" action="/profile/" style="width: 350px; display: inline-block;" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-floating mb-3">
-                    <img src="{{request.user.profile.avatar.url}}" style="height: auto; max-height: 200px; width: auto; max-width: 200px; margin-bottom: 10px;">
+                    <img src="{{request.user.profile.avatar.url}}" class="img-thumbnail" style="height: auto; max-height: 200px; width: auto; max-width: 200px; margin-bottom: 10px;">
                     <input type="file" name="avatar" accept="image/*" id="id_avatar">
                 </div>
                 {{ form.non_field_errors }}
