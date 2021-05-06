@@ -48,7 +48,9 @@ def registerView(request):
 @login_required
 def profileView(request):
     if request.method == "POST":
-        profile_form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        profile_form = ProfileForm(
+            request.POST, request.FILES, instance=request.user.profile
+        )
         if profile_form.is_valid():
             messages.add_message(
                 request,
