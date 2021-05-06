@@ -1,16 +1,20 @@
 {% extends "tweetApp/base.html" %}
-
+{% load static %}
 {% block main %}
-    <div class="row" style="margin-top: 62px; height: 100%; background: linear-gradient(#FFFFFF 70%, #1DA1F2); position: relative;">
-        <div class="col-lg" >
-            
-
+    <style>
+        @keyframes twitter_show {
+            from {color: white;}
+            to {color: #1DA1F2;}
+        }
+    </style>
+    <div class="row" style="min-height: 100%; padding-top: 80px; background: linear-gradient(white 75%, #1DA1F2);">
+        <div class="col-lg" style="align-content: center;">
+           <img class="d-none d-lg-block mx-auto" src="{% static 'tweetApp/big_logo.png' %}" alt="Twitter" style="max-width: 400px; margin-top: 20px;"> 
+           <img class="d-lg-none" src="{% static 'tweetApp/big_logo.png' %}" alt="Twitter" style="max-width: 200px; margin: auto; display: block; margin-top: 30px;">
         </div>
         <div class="col-lg" >
-
-        </div>
-        <div class="col-lg">
-            
+            <h1 class="display-2 user-select-none" style="animation-name: twitter_show; animation-duration: 5s;animation-fill-mode: forwards; max-width: 400px; margin: 40px;">Welcome on Twitter.</h1>
         </div>
     </div>
+    
 {% endblock %}
