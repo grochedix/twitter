@@ -6,6 +6,13 @@
             from {color: white;}
             to {color: #1DA1F2;}
         }
+        @keyframes slogan_show {
+            0% {color: red;}
+            25% {color: #1DA1F2;}
+            50% {color: green;}
+            75% {color: orange;}
+            100% {color: black;}
+        }
     </style>
     <div class="row" style="min-height: 100%; padding-top: 120px; background: linear-gradient(white 75%, #1DA1F2);">
         <div class="col-lg" style="align-content: center;">
@@ -14,6 +21,7 @@
         </div>
         <div class="col-lg" >
             <h1 class="display-2 user-select-none" style="animation-name: twitter_show; animation-duration: 5s;animation-fill-mode: forwards; max-width: 400px; margin: 40px;">Welcome on Twitter.</h1>
+            <h3 class="display-4 user-select-none lead" style="margin: 40px; animation-name: slogan_show; animation-duration: 8s;animation-direction: alternate; animation-iteration-count: infinite;">Discover what is happening right now in the world.</h3>
         </div>
     </div>
     
