@@ -1,4 +1,7 @@
 {
     "git.ignoreLimitWarning": true,
+    "python.linting.pylintArgs": [
+        "--load-plugins=pylint_django --django-settings-module=twitter.settings"
+   ],
     "python.pythonPath": "virtual\\Scripts\\python.exe"
 }
