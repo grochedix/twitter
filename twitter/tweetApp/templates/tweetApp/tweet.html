@@ -1,0 +1,17 @@
+<div class="card" style="max-width: 95%;">
+    <div class="card-header">
+        <img src="{{tweet.author.profile.avatar.url}}" style="max-width: 30px; max-height: 30px;" class="rounded">  
+        @{{tweet.author}}
+    </div>
+    <div class="card-body">
+      <blockquote class="blockquote mb-0">
+        <p>{{tweet.content}}</p>
+        {% if tweet.image %}
+        <img src="{{tweet.image.url}}" style="max-height: 120px;" class="rounded mx-auto d-block">
+        {% endif %}
+      </blockquote>
+    </div>
+    <div class="card-footer text-muted user-select-none">
+        {{tweet.date}}
+      </div>
+  </div>

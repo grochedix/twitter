@@ -1,20 +1,59 @@
-<div class="row" style="min-height: 100%; padding-top: 60px;">
-    <div class="col-md">
-        <form style="margin-left: 15px;" method="POST" action="{% url 'tweet' %}" enctype="multipart/form-data">
+<div class="row" style="min-height: 100%; padding-top: 62px;">
+    <div class="col-md ">
+        <form class="border rounded shadow " style="padding: 15px; max-width: 75%; margin: auto; margin-top: 10px;" method="POST" action="{% url 'tweet' %}" enctype="multipart/form-data">
             {% csrf_token %}
             {{ tweet_form.non_field_errors }}
-                <label for="{{ tweet_form.content.id_for_label }}" style="margin-top: 10px">Tweet:</label>
+                <label for="{{ tweet_form.content.id_for_label }}" class="text-muted">Tweet:</label>
                 {{ tweet_form.content.errors }}
                 {{ tweet_form.content }}
-                <p><em id="tweet_len">0/280</em></p>
+                <p class="text-muted"><em id="tweet_len">0/280</em></p>
                 {{ tweet_form.image.errors }}
                 {{ tweet_form.image }}  
                 <input class="btn btn-primary btn-sm" type="submit" style="margin-top:10px;" value="Tweet!">
                    
         </form>
     </div>
-    <div class="col-md border border-info overflow-auto border-3 rounded-3 border-bottom-0" style="min-height: 100%; max-height: 100%;"> test</div>
-    <div class="col-md-3 d-none d-lg-block"></div>
+    <div class="col-md border border border-3 rounded-3 border-bottom-0 shadow-sm overflow-hidden" style="min-height: 100%; max-height: 100%; position: relative;">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="newsfeed-tab" data-bs-toggle="tab" data-bs-target="#newsfeed" type="button" role="tab" aria-controls="newsfeed" aria-selected="true"><span class="lead text-info">Newsfeed</span></button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="my_tweets-tab" data-bs-toggle="tab" data-bs-target="#my_tweets" type="button" role="tab" aria-controls="my_tweets" aria-selected="false"><span class="lead text-info">My Tweets</span></button>
+            </li>
+        </ul>
+        <div class="tab-content overflow-auto" id="myTabContent" style="height: 94%; width: 100%; position: absolute; padding: auto;">
+            <div class="tab-pane fade show active" id="newsfeed" role="tabpanel" aria-labelledby="newsfeed-tab">
+                <table class="table table-hover overflow-auto" >
+                    <tbody>
+                        {% for tweet in newsfeed %}
+                        <tr>
+                            <td scope="row">
+                                {% include "tweetApp/tweet.html" %}
+                            </td>   
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="my_tweets" role="tabpanel" aria-labelledby="my_tweets-tab" >
+                <table class="table table-hover">
+                    <tbody>
+                        {% for tweet in personnal_tweets %}
+                        <tr>
+                            <td scope="row">
+                                {% include "tweetApp/tweet.html" %}
+                            </td>   
+                        </tr>
+                        {% endfor %}
+                </tbody>
+                </table>
+            </div>
+        </div>  
+    </div>
+    <div class="col-md-3 d-none d-lg-block">
+
+    </div>
 
     <script>
         tweet_len = document.getElementById('tweet_len');

@@ -17,7 +17,7 @@ class TweetForm(forms.ModelForm):
             {
                 "class": "form-control",
                 "rows": "3",
-                "style": "max-width: 350px",
+                "style": "max-width: 450px; margin-top:5px",
                 "autofocus": '""',
                 "placeholder": "What's going on?",
             }

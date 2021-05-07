@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
 from .forms import TweetForm
+from .models import Tweet, Follow
 
 
 def redirect_homepage(request):
@@ -31,8 +32,19 @@ class HomePageView(TemplateView):
                 messages.WARNING,
                 "You need to be logged in to access to this page.",
             )
-        if self.request.user.is_authenticated and "tweet_form" not in context:
-            context.update({"tweet_form": TweetForm()})
+        if self.request.user.is_authenticated:
+            user = self.request.user
+            newsfeed = Tweet.objects.filter(
+                author__in=Follow.objects.filter(followed=user).values_list("followed")
+            ).select_related('author').order_by('-date')[:100]
+            personnal_tweets = Tweet.objects.filter(author=user).select_related('author', 'author__profile').order_by('-date')[:100]
+            context.update(
+                {
+                    "tweet_form": TweetForm(),
+                    "newsfeed": newsfeed,
+                    "personnal_tweets": personnal_tweets,
+                }
+            )
         return context
 
 
@@ -45,4 +57,9 @@ def tweetView(request):
         tweet.author = request.user
         tweet.save()
         return redirect(request.META["HTTP_REFERER"])
-    return redirect("home", {"tweet_form": form})
+    messages.add_message(
+        request,
+        messages.WARNING,
+        "The tweet could not be created!",
+    )
+    return redirect("home")
