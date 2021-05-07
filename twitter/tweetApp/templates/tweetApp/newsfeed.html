@@ -1,5 +1,27 @@
 <div class="row" style="min-height: 100%; padding-top: 60px;">
-    <div class="col-md"></div>
+    <div class="col-md">
+        <form style="margin-left: 15px;" method="POST" action="{% url 'tweet' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ tweet_form.non_field_errors }}
+                <label for="{{ tweet_form.content.id_for_label }}" style="margin-top: 10px">Tweet:</label>
+                {{ tweet_form.content.errors }}
+                {{ tweet_form.content }}
+                <p><em id="tweet_len">0/280</em></p>
+                {{ tweet_form.image.errors }}
+                {{ tweet_form.image }}  
+                <input class="btn btn-primary btn-sm" type="submit" style="margin-top:10px;" value="Tweet!">
+                   
+        </form>
+    </div>
     <div class="col-md border border-info overflow-auto border-3 rounded-3 border-bottom-0" style="min-height: 100%; max-height: 100%;"> test</div>
-    <div class="col-md d-none d-lg-block"></div>
+    <div class="col-md-3 d-none d-lg-block"></div>
+
+    <script>
+        tweet_len = document.getElementById('tweet_len');
+        tweet = document.getElementById('{{ tweet_form.content.id_for_label }}');
+        tweet.addEventListener('keyup', () => {
+            tweet_len.innerHTML = String(tweet.value.length) + "/280"
+        })
+
+    </script>
 </div>

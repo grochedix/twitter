@@ -1,6 +1,10 @@
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+
+from .forms import TweetForm
 
 
 def redirect_homepage(request):
@@ -27,4 +31,18 @@ class HomePageView(TemplateView):
                 messages.WARNING,
                 "You need to be logged in to access to this page.",
             )
+        if self.request.user.is_authenticated and "tweet_form" not in context:
+            context.update({"tweet_form": TweetForm()})
         return context
+
+
+@login_required
+@require_POST
+def tweetView(request):
+    form = TweetForm(request.POST, request.FILES)
+    if form.is_valid:
+        tweet = form.save(commit=False)
+        tweet.author = request.user
+        tweet.save()
+        return redirect(request.META["HTTP_REFERER"])
+    return redirect("home", {"tweet_form": form})

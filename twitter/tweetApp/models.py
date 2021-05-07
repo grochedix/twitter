@@ -9,10 +9,14 @@ class Tweet(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
 
-class Retweet(Tweet):
+class Retweet(models.Model):
     tweet = models.ForeignKey(
         to=Tweet, on_delete=models.CASCADE, related_name="retweets"
     )
+    user = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, related_name="retweets"
+    )
+    date = models.DateTimeField(auto_now_add=True)
 
 
 class Comment(models.Model):
