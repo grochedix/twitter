@@ -1,6 +1,9 @@
 {% extends "tweetApp/base.html" %}
 {% load static %}
 {% block main %}
+    {% if user.is_authenticated %}
+        {% include "tweetApp/newsfeed.html" %}
+    {% else %}
     <style>
         @keyframes twitter_show {
             from {color: white;}
@@ -24,5 +27,5 @@
             <h3 class="display-4 user-select-none lead" style="margin: 40px; animation-name: slogan_show; animation-duration: 8s;animation-direction: alternate; animation-iteration-count: infinite;">Discover what is happening right now in the world.</h3>
         </div>
     </div>
-    
+    {% endif %}
 {% endblock %}
