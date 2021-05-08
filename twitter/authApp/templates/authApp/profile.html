@@ -4,41 +4,50 @@
 <div class="container-fluid" style="margin-top: max(10vh, 65px); text-align: center;">
     <div class="row">
         <div class="col-sm" style="display: inline-block;">
-            <form method="POST" action="/profile/" style="width: 350px; display: inline-block;" enctype="multipart/form-data">
+            <form method="POST" action="/profile/" style="display: inline-block;" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="form-floating mb-3">
-                    Your Profile Picture:
-                    <img src="{{request.user.profile.avatar.url}}" class="img-thumbnail" style="height: auto; max-height: 200px; width: auto; max-width: 200px; margin-bottom: 10px;">
-                    <input type="file" name="avatar" accept="image/*" id="id_avatar">
+                <div class="col-auto">
+                    <div class="form-floating mb-3">
+                        Your Profile Picture:
+                        <img src="{{request.user.profile.avatar.url}}" class="img-thumbnail" style="height: auto; max-height: 200px; width: auto; max-width: 200px; margin-bottom: 10px;">
+                        <input type="file" name="avatar" accept="image/*" id="id_avatar">
+                    </div>
+                    <div class="form-floating mb-3">
+                        Your Background Picture:
+                        <img src="{{request.user.profile.background.url}}" class="img-thumbnail" style="height: auto; max-height: 200px; width: auto; max-width: 400px; margin-bottom: 10px;">
+                        <input type="file" name="background" accept="image/*" id="id_avatar">
+                    </div>
                 </div>
-                <div class="form-floating mb-3">
-                    Your Background Picture:
-                    <img src="{{request.user.profile.background.url}}" class="img-thumbnail" style="height: auto; max-height: 200px; width: auto; max-width: 400px; margin-bottom: 10px;">
-                    <input type="file" name="background" accept="image/*" id="id_avatar">
+                <div class="col-auto" style="width: min(400px,80%); display: inline-block;">
+                    {{ form.non_field_errors }}
+                    <div class="form-floating mb-3">
+                        {{ form.first_name.errors }}
+                        {{ form.first_name }}
+                        <label for="{{ form.first_name.id_for_label }}">First Name:</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        {{ form.last_name.errors }}
+                        {{ form.last_name }}
+                        <label for="{{ form.last_name.id_for_label }}">Last Name:</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        {{ form.city.errors }}
+                        {{ form.city }}
+                        <label for="{{ form.city.id_for_label }}">City:</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        {{ form.country.errors }}
+                        {{ form.country }}
+                        <label for="{{ form.country.id_for_label }}">Country:</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        {{ form.description.errors }}
+                        {{ form.description }}
+                        <label for="{{ form.description.id_for_label }}">Description:</label>
+                    </div>
+                    
+                <button type="submit" class="btn btn-secondary">Submit</button>
                 </div>
-                {{ form.non_field_errors }}
-                <div class="form-floating mb-3">
-                    {{ form.first_name.errors }}
-                    {{ form.first_name }}
-                    <label for="{{ form.first_name.id_for_label }}">First Name:</label>
-                </div>
-                <div class="form-floating mb-3">
-                    {{ form.last_name.errors }}
-                    {{ form.last_name }}
-                    <label for="{{ form.last_name.id_for_label }}">Last Name:</label>
-                </div>
-                <div class="form-floating mb-3">
-                    {{ form.city.errors }}
-                    {{ form.city }}
-                    <label for="{{ form.city.id_for_label }}">City:</label>
-                </div>
-                <div class="form-floating mb-3">
-                    {{ form.country.errors }}
-                    {{ form.country }}
-                    <label for="{{ form.country.id_for_label }}">Country:</label>
-                </div>
-                
-            <button type="submit" class="btn btn-secondary">Submit</button>
             </form>
     </div>
 </div>

@@ -1,5 +1,5 @@
 <div class="row" style="min-height: 100%; padding-top: 62px; max-width: 100%;">
-    <div class="col-md ">
+    <div class="col-md align-self-center" style="height: 100%;">
         <form class="border rounded shadow " style="padding: 15px; max-width: 75%; margin: auto; margin-top: 10px;" method="POST" action="{% url 'tweet' %}" enctype="multipart/form-data">
             {% csrf_token %}
             {{ tweet_form.non_field_errors }}
@@ -51,7 +51,7 @@
             </div>
         </div>  
     </div>
-    <div class="col-md-3 d-none d-lg-block">
+    <div class="col-lg-2 col-xxl-3 d-none d-lg-block">
 
     </div>
 

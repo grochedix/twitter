@@ -3,7 +3,7 @@
 {% block main %}
 
     <div class="row" style="min-height: 100%; padding-top: 62px; max-width: 100%; --bs-gutter-x: 0;">
-        <div class="col-md" style="width: 100%;">
+        <div class="col-lg" style="width: 100%; max-height: 60%; position: relative;">
             <div class="col-12 d-flex" style="min-height: 100px; padding-top: 20px; background-image: url('{{ account.profile.background.url }}'); background-size: cover; background-repeat: no-repeat; background-position: center center;  position: relative;">
                 <div class="container-fluid">
                     <img src="{{ account.profile.avatar.url }}" class="img-thumbnail shadow" style="max-width: min(180px, 70%); max-height: 200px; position: relative; bottom: -35px; margin-left: 15px;">
@@ -14,18 +14,41 @@
                 </a> 
                 {% endif %}
             </div>
-            <div class="col-12" style="padding-top: 35px; padding-left: 10px;">
-            <h1 class="display-5">{{ account.username }}</h1>
+            <div class="col-12" style="padding-top: 35px; padding-left: 18px; position: absolute;">
+            <h1 class="display-5">{{ account.username }}<span class="lead">, 
+            followed by {{account.followers__count}}, follows {{account.follows__count}} account{{account.follows__count|pluralize}}.
+            </span></h1> 
+            {% if request.user.is_authenticated and account != request.user %}
+            <form action="{% url 'account-detail' account.username %}" method="POST">
+                {% csrf_token %}
+                {% if account.follow_exists %}
+                <input type="submit" class="btn btn-danger btn-sm" value="Unfollow">
+                {% else %}
+                <input type="submit" class="btn btn-primary btn-sm" value="Follow">
+                {% endif %}
+            </form>
+            {% endif %}
+            <p class="lead">
+                <i class="bi bi-person"></i>
+                <span class="user-select-all">
+                {{account.profile.first_name|title }} {{account.profile.last_name|title }} 
+                </span> 
+            </p>
             <p class="lead">
                 <i class="bi bi-geo-alt"></i> 
                 <span class="user-select-all">
-                {{account.profile.country |title }}{% if account.profile.city and account.profile.country %},
-                {% endif %} {{account.profile.city |title }} 
+                {{account.profile.country|title }}{% if account.profile.city and account.profile.country %},
+                {% endif %} {{account.profile.city|title }} 
                 </span> 
             </p>
+            <p class="lead">
+                <i class="bi bi-megaphone"></i> 
+                {{account.profile.description|capfirst|truncatechars:280 }} 
+            </p>
+            
             </div>
         </div>
-        <div class="col-md ">
+        <div class="col-lg">
             <div class="col-md border border-3 rounded-3 border-bottom-0 shadow-sm overflow-hidden" style="min-height: 100%; max-height: 100%; width: 100%; position: relative;">
                 <div class="overflow-auto" style="height: 100%; width: 100%; position: absolute; padding: auto; margin-left: 5px; ">
                     <table class="table table-hover" >
@@ -42,8 +65,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-2 col-xl-3 col-xxl-4 d-none d-lg-block">
-            
+        <div class="col-xl-2 col-xxl-3 d-none d-none d-xl-block">
+
         </div>
     </div>
 
