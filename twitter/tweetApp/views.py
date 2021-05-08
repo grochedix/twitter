@@ -1,11 +1,15 @@
-from django.shortcuts import redirect
-from django.views.generic import TemplateView
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count, Prefetch
+from django.shortcuts import redirect, render
+from django.utils.decorators import method_decorator
+from django.views import View
 from django.views.decorators.http import require_POST
+from django.views.generic import TemplateView
 
 from .forms import TweetForm
-from .models import Tweet, Follow
+from .models import Follow, Tweet
 
 
 def redirect_homepage(request):
@@ -34,10 +38,20 @@ class HomePageView(TemplateView):
             )
         if self.request.user.is_authenticated:
             user = self.request.user
-            newsfeed = Tweet.objects.filter(
-                author__in=Follow.objects.filter(followed=user).values_list("followed")
-            ).select_related('author').order_by('-date')[:100]
-            personnal_tweets = Tweet.objects.filter(author=user).select_related('author', 'author__profile').order_by('-date')[:100]
+            newsfeed = (
+                Tweet.objects.filter(
+                    author__in=Follow.objects.filter(followed=user).values_list(
+                        "followed", flat=True
+                    )
+                )
+                .select_related("author", "author__profile")
+                .order_by("-date")[:100]
+            )
+            personnal_tweets = (
+                Tweet.objects.filter(author=user)
+                .select_related("author", "author__profile")
+                .order_by("-date")[:100]
+            )
             context.update(
                 {
                     "tweet_form": TweetForm(),
@@ -63,3 +77,20 @@ def tweetView(request):
         "The tweet could not be created!",
     )
     return redirect("home")
+
+
+class AccountView(View):
+    def get(self, request, username, *args, **kwargs):
+        account = (
+            get_user_model()
+            .objects.defer("is_staff", "is_superuser", "password", "is_active", "email")
+            .select_related("profile")
+            .prefetch_related(Prefetch("tweets", Tweet.objects.order_by("-date")))
+            .annotate(Count("followers"), Count("follows"))
+            .get(username=username)
+        )
+        return render(request, "tweetApp/account-detail.html", {"account": account})
+
+    @method_decorator(login_required)
+    def post(self, request, pk, *args, **kwargs):
+        return render(request, "tweetApp/account-detail.html")

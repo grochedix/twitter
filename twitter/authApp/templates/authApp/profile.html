@@ -1,14 +1,20 @@
 {% extends "tweetApp/base.html" %}
 
 {% block main %}
-<div class="container-fluid" style="margin-top: 20vh; text-align: center;">
+<div class="container-fluid" style="margin-top: max(10vh, 65px); text-align: center;">
     <div class="row">
         <div class="col-sm" style="display: inline-block;">
             <form method="POST" action="/profile/" style="width: 350px; display: inline-block;" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-floating mb-3">
+                    Your Profile Picture:
                     <img src="{{request.user.profile.avatar.url}}" class="img-thumbnail" style="height: auto; max-height: 200px; width: auto; max-width: 200px; margin-bottom: 10px;">
                     <input type="file" name="avatar" accept="image/*" id="id_avatar">
+                </div>
+                <div class="form-floating mb-3">
+                    Your Background Picture:
+                    <img src="{{request.user.profile.background.url}}" class="img-thumbnail" style="height: auto; max-height: 200px; width: auto; max-width: 400px; margin-bottom: 10px;">
+                    <input type="file" name="background" accept="image/*" id="id_avatar">
                 </div>
                 {{ form.non_field_errors }}
                 <div class="form-floating mb-3">

@@ -1,4 +1,4 @@
-<div class="row" style="min-height: 100%; padding-top: 62px;">
+<div class="row" style="min-height: 100%; padding-top: 62px; max-width: 100%;">
     <div class="col-md ">
         <form class="border rounded shadow " style="padding: 15px; max-width: 75%; margin: auto; margin-top: 10px;" method="POST" action="{% url 'tweet' %}" enctype="multipart/form-data">
             {% csrf_token %}
@@ -24,7 +24,7 @@
         </ul>
         <div class="tab-content overflow-auto" id="myTabContent" style="height: 94%; width: 100%; position: absolute; padding: auto;">
             <div class="tab-pane fade show active" id="newsfeed" role="tabpanel" aria-labelledby="newsfeed-tab">
-                <table class="table table-hover overflow-auto" >
+                <table class="table table-hover" >
                     <tbody>
                         {% for tweet in newsfeed %}
                         <tr>

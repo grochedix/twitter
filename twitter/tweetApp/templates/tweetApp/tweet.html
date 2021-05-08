@@ -1,7 +1,9 @@
 <div class="card" style="max-width: 95%;">
     <div class="card-header">
+      <a href="{% url 'account-detail' tweet.author.username %}" class="link-info" style="text-decoration: none;">
         <img src="{{tweet.author.profile.avatar.url}}" style="max-width: 30px; max-height: 30px;" class="rounded">  
         @{{tweet.author}}
+      </a>
     </div>
     <div class="card-body">
       <blockquote class="blockquote mb-0">

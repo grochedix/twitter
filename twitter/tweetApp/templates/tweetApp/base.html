@@ -1,6 +1,6 @@
 <!doctype html>
 
-<html lang="en" style="height: 100%; margin:0;">
+<html lang="en" style="height: 100%; width: 100%; margin:0;">
 
   <head>
     <!-- Required meta tags -->
@@ -12,11 +12,13 @@
     
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
-
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
     <title>Twitter Clone</title>
   </head>
   
-  <body style="height: 100%; margin: 0;">
+  <body style="height: 100%; margin: 0; max-width: 100%;">
     {% load static %}
 
     {% for message in messages %}
@@ -27,9 +29,9 @@
     {% endfor %}
 
     {% block navbar %}
-    <nav class="navbar fixed-top navbar-light" style="height: 62px; box-shadow: 2px 2px 15px #1DA1F2; opacity: 1; width: 100%; background-color: white;">
+    <nav class="navbar fixed-top navbar-light" style="height: 62px; max-width: 100%; box-shadow: 2px 2px 15px #1DA1F2; background-color: white;">
         <div class="container-fluid">
-          <a class="navbar-brand" href={% url 'home' %}>
+          <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'tweetApp/logo.png' %}" style="height: 30px;" alt="logo">
           </a>
           
@@ -38,14 +40,14 @@
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
           {% if user.is_authenticated %}
-          <div class="navbar-text d-sm-none">Welcome <a href="{% url 'profile' %}"><b>{{user.username}}</b></a>.</div>
-          <div class="navbar-text d-none d-sm-inline">Welcome <a href="{% url 'profile' %}"><b>{{user.username}}</b></a>
+          <div class="navbar-text d-sm-none">Welcome <a href="{% url 'account-detail' user.username %}"><b>{{user.username}}</b></a>.</div>
+          <div class="navbar-text d-none d-sm-inline">Welcome <a href="{% url 'account-detail' user.username %}"><b>{{user.username}}</b></a>
             , what's on your mind today?</div>
           
           <div>
             <form action="/logout/" method="POST">
               {% csrf_token %}
-              <button type="submit" class="btn btn-outline-danger">Logout</button>
+              <button type="submit" class="btn btn-outline-danger" style="margin-right: 10px;">Logout</button>
             </form>
           </div>
           {% else %}

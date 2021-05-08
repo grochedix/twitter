@@ -4,7 +4,9 @@ from django.db import models
 
 class Tweet(models.Model):
     content = models.CharField(max_length=280)
-    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, related_name="tweets"
+    )
     image = models.ImageField(upload_to="tweets/%Y/%m/%d/", blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
 
