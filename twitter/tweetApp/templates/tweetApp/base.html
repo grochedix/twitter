@@ -16,6 +16,8 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
     <title>Twitter Clone</title>
+
+
   </head>
   
   <body style="height: 100%; margin: 0; max-width: 100%;">
@@ -145,13 +147,14 @@
           loginInput.focus()
         })
       </script>
-    <script src="{% static 'tweetApp/utils.js' %}"></script>
+    
     {% endblock %}
 
     {% block main %}
         
     {% endblock %}
-   
-  </body>
+    <script src="{% static 'tweetApp/utils.js' %}"></script>
 
+  </body>
+  
 </html>

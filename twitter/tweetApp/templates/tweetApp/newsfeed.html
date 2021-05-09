@@ -1,16 +1,15 @@
 <div class="row" style="min-height: 100%; padding-top: 62px; max-width: 100%;">
     <div class="col-md align-self-center" style="height: 100%;">
-        <form class="border rounded shadow " style="padding: 15px; max-width: 75%; margin: auto; margin-top: 10px;" method="POST" action="{% url 'tweet' %}" enctype="multipart/form-data">
+        <form class="border rounded shadow overflow-hidden" style="padding: 15px; max-width: 75%; margin: auto;" method="POST" action="{% url 'tweet' %}" enctype="multipart/form-data">
             {% csrf_token %}
             {{ tweet_form.non_field_errors }}
-                <label for="{{ tweet_form.content.id_for_label }}" class="text-muted">Tweet:</label>
+                <label for="{{ tweet_form.content.id_for_label }}" class="text-muted user-select-none">Tweet:</label>
                 {{ tweet_form.content.errors }}
                 {{ tweet_form.content }}
-                <p class="text-muted"><em id="tweet_len">0/280</em></p>
+                <p class="text-muted user-select-none"><em id="tweet_len">0/280</em></p>
                 {{ tweet_form.image.errors }}
                 {{ tweet_form.image }}  
-                <input class="btn btn-primary btn-sm" type="submit" style="margin-top:10px;" value="Tweet!">
-                   
+                <input class="btn btn-primary btn-sm float-end" type="submit" style="margin-top:10px;" value="Tweet!">
         </form>
     </div>
     <div class="col-md border border border-3 rounded-3 border-bottom-0 shadow-sm overflow-hidden" style="min-height: 100%; max-height: 100%; position: relative;">
@@ -30,6 +29,16 @@
                         <tr>
                             <td scope="row">
                                 {% include "tweetApp/tweet.html" %}
+                            </td>   
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td scope="row">
+                                <div class="card" style="max-width: 95%;">
+                                    <div class="card-body">
+                                        test
+                                    </div>
+                                </div>
                             </td>   
                         </tr>
                         {% endfor %}
@@ -61,6 +70,5 @@
         tweet.addEventListener('keyup', () => {
             tweet_len.innerHTML = String(tweet.value.length) + "/280"
         })
-
     </script>
 </div>

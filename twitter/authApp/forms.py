@@ -31,6 +31,6 @@ class ProfileForm(forms.ModelForm):
                 "class": "form-control",
                 "rows": "5",
                 "placeholder": "Tell us a little bit about yourself...",
-                "style": "min-height:100px"
+                "style": "min-height:100px",
             }
         )

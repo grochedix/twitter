@@ -1,4 +1,6 @@
-<div class="card" style="max-width: 95%;">
+{% load humanize %}
+
+<div class="card" style="max-width: 99%;">
     <div class="card-header">
       <a href="{% url 'account-detail' tweet.author.username %}" class="link-info" style="text-decoration: none;">
         <img src="{{tweet.author.profile.avatar.url}}" style="max-width: 30px; max-height: 30px;" class="rounded">  
@@ -13,7 +15,45 @@
         {% endif %}
       </blockquote>
     </div>
-    <div class="card-footer text-muted user-select-none">
-        {{tweet.date}}
+    <div class="card-footer text-muted justify-content-between">
+      <div class="row justify-content-between">
+        <div class="col user-select-none">
+          {{tweet.date}} 
+          
+        </div>
+          <div class="col-2"><i {% if tweet.like_exists %}class="bi bi-heart-fill text-danger"{% else %}class="bi bi-heart"{% endif %} id="{{tweet.id}}-like" style="cursor: pointer;"> {{tweet.likes__count|intcomma}}</i></div>
+          <div class="col-2"><i class="bi bi-chat-right" id="{{tweet.id}}-comment" tweet-id="{{tweet.id}}"> {{tweet.comments__count|intcomma}}</i></div>
+          <div class="col-2"><i class="bi bi-arrow-counterclockwise" id="{{tweet.id}}-retweet" tweet-id="{{tweet.id}}"> {{tweet.retweets__count|intcomma}}</i></div>
       </div>
-  </div>
+    </div>
+</div>
+
+{% if request.user.is_authenticated %}
+  <script>
+    document.getElementById("{{tweet.id}}-like").addEventListener(
+      'click', async () => {
+        var id = "{{tweet.id}}";
+        var tweet = document.getElementById(`${id}-like`);
+        await fetch(`/like/${id}`, {
+            method: 'post',
+            mode: 'same-origin',
+            headers: django_ajax_headers,
+        }).then(function(response) {
+            return response.json();
+        }).then(function(data) { 
+            if (data["created"] === "f") {
+                tweet.classList.remove("text-danger");
+                tweet.classList.remove("bi-heart-fill");
+                tweet.classList.add("bi-heart");
+                tweet.innerHTML = " " + String(parseInt(tweet.innerHTML)-1);
+            } else {
+                tweet.classList.add("text-danger");
+                tweet.classList.add("bi-heart-fill");
+                tweet.classList.remove("bi-heart");
+                tweet.innerHTML = " " + String(parseInt(tweet.innerHTML)+1);
+            }
+        })
+      } 
+    )
+  </script>
+{% endif %}

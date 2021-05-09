@@ -1,3 +1,5 @@
+
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -16,6 +18,13 @@ function getCookie(name) {
 
 
 const csrftoken = getCookie('csrftoken');
+
+const django_ajax_headers = {
+    'Accept': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+    'X-CSRFToken': csrftoken
+}
+
 let registerForm = document.getElementById("registerForm");
 
 registerForm.addEventListener("submit", async function(event) {
@@ -31,13 +40,8 @@ registerForm.addEventListener("submit", async function(event) {
         }
         await fetch('/register/', {
                 method: 'post',
-                'Accept': 'application/json',
                 mode: 'same-origin',
-                headers: {
-                    'Accept': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRFToken': csrftoken
-                },
+                headers: django_ajax_headers,
                 body: JSON.stringify(data),
             }
         ).then(function(response) {
@@ -76,15 +80,10 @@ loginForm.addEventListener('submit', async event => {
     }
     await fetch('/login/', {
             method: 'post',
-            'Accept': 'application/json',
-                mode: 'same-origin',
-                headers: {
-                    'Accept': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRFToken': csrftoken
-                },
-                body: JSON.stringify(data),
-            }
+            mode: 'same-origin',
+            headers: django_ajax_headers,
+            body: JSON.stringify(data),
+        }
     ).then(function(response) {
         return response.json();
     }).then(function(data) {
@@ -103,3 +102,4 @@ loginForm.addEventListener('submit', async event => {
     }
 })
 })
+
