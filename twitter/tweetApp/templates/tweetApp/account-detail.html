@@ -22,9 +22,9 @@
             <form action="{% url 'account-detail' account.username %}" method="POST">
                 {% csrf_token %}
                 {% if account.follow_exists %}
-                <input type="submit" class="btn btn-danger btn-sm" value="Unfollow">
+                <input type="submit" class="btn btn-danger btn-sm" value="Unfollow" style="margin:5px;">
                 {% else %}
-                <input type="submit" class="btn btn-primary btn-sm" value="Follow">
+                <input type="submit" class="btn btn-primary btn-sm" value="Follow" style="margin:5px;">
                 {% endif %}
             </form>
             {% endif %}

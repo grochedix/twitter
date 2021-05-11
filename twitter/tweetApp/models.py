@@ -3,7 +3,7 @@ from django.db import models
 
 
 class Tweet(models.Model):
-    content = models.CharField(max_length=280)
+    content = models.CharField(max_length=280, blank=True, null=True)
     author = models.ForeignKey(
         get_user_model(), on_delete=models.CASCADE, related_name="tweets"
     )
@@ -15,7 +15,7 @@ class Retweet(models.Model):
     tweet = models.ForeignKey(
         to=Tweet, on_delete=models.CASCADE, related_name="retweets"
     )
-    user = models.ForeignKey(
+    author = models.ForeignKey(
         get_user_model(), on_delete=models.CASCADE, related_name="retweets"
     )
     date = models.DateTimeField(auto_now_add=True)
@@ -37,6 +37,9 @@ class Like(models.Model):
     )
     tweet = models.ForeignKey(Tweet, on_delete=models.CASCADE, related_name="likes")
     date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ["tweet", "user"]
 
 
 class Follow(models.Model):

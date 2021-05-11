@@ -13,6 +13,14 @@
         {% if tweet.image %}
         <img src="{{tweet.image.url}}" style="max-height: 120px;" class="rounded mx-auto d-block">
         {% endif %}
+        {% if tweet.retweet_author %}
+          <div class="text-muted" ><small style="font-size: 15px;"><i class="bi bi-arrow-counterclockwise"></i>
+            <a href="{% url 'account-detail' tweet.retweet_author %}" class="link-info" style="text-decoration: none;">
+              
+            @{{tweet.retweet_author}}</a> has retweeted this tweet.
+            </i>
+          </small></div>
+        {% endif %}
       </blockquote>
     </div>
     <div class="card-footer text-muted justify-content-between">
@@ -21,9 +29,9 @@
           {{tweet.date}} 
           
         </div>
-          <div class="col-2"><i {% if tweet.like_exists %}class="bi bi-heart-fill text-danger"{% else %}class="bi bi-heart"{% endif %} id="{{tweet.id}}-like" style="cursor: pointer;"> {{tweet.likes__count|intcomma}}</i></div>
-          <div class="col-2"><i class="bi bi-chat-right" id="{{tweet.id}}-comment" tweet-id="{{tweet.id}}"> {{tweet.comments__count|intcomma}}</i></div>
-          <div class="col-2"><i class="bi bi-arrow-counterclockwise" id="{{tweet.id}}-retweet" tweet-id="{{tweet.id}}"> {{tweet.retweets__count|intcomma}}</i></div>
+          <div class="col-2"><i {% if tweet.like_exists %}class="bi bi-heart-fill text-danger"{% else %}class="bi bi-heart"{% endif %} id="{{tweet.id}}-like" style="cursor: pointer;"> {{tweet.likes.count|intcomma}}</i></div>
+          <div class="col-2"><i class="bi bi-chat-right" id="{{tweet.id}}-comment" tweet-id="{{tweet.id}}"> {{tweet.comments.count|intcomma}}</i></div>
+          <div class="col-2"><i class="bi bi-arrow-counterclockwise" id="{{tweet.id}}-retweet" tweet-id="{{tweet.id}}"> {{tweet.retweets.count|intcomma}}</i></div>
       </div>
     </div>
 </div>
@@ -55,5 +63,25 @@
         })
       } 
     )
+
+    {% if tweet.author != request.user %}
+    document.getElementById("{{tweet.id}}-retweet").addEventListener(
+      'click', async () => {
+        var id = "{{tweet.id}}";
+        var tweet = document.getElementById(`${id}-retweet`);
+        await fetch(`/retweet/${id}`, {
+            method: 'post',
+            mode: 'same-origin',
+            headers: django_ajax_headers,
+        }).then(function(response) {
+            return response.json();
+        }).then(function(data) { 
+            if (data["created"] === "t") {
+                tweet.innerHTML = " " + String(parseInt(tweet.innerHTML)+1);
+            }
+        })
+      } 
+    )
+    {% endif %}
   </script>
 {% endif %}
