@@ -52,12 +52,8 @@ def profileView(request):
             request.POST, request.FILES, instance=request.user.profile
         )
         if profile_form.is_valid():
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                "Profil updated.",
-            )
             profile_form.save()
+            return redirect("account-detail", username=request.user.username)
     else:
         profile_form = ProfileForm(instance=request.user.profile)
     return render(request, "authApp/profile.html", {"form": profile_form})

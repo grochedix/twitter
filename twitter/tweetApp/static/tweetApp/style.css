@@ -1,0 +1,4 @@
+.detail-tweet, .detail-tweet:hover, .detail-tweet:visited, .detail-tweet:active {
+    color: inherit;
+    text-decoration: none;
+   }
