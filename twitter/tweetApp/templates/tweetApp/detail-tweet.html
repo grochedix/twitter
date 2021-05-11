@@ -1,0 +1,14 @@
+{% extends "tweetApp/base.html" %}
+
+{% block main %}
+    <div class="row" style="min-height: 100%; padding-top: 66px; max-width: 100%; --bs-gutter-x: 0;">
+     <div class="col d-none d-md-block"></div>
+        <div class="col-md-6 col-lg-4">
+            {% include "tweetApp/tweet.html" with tweet=object %}
+                {% for comment in object.comments.all %}
+                    {% include "tweetApp/comment.html" %}
+                {% endfor %}
+        </div>
+     <div class="col d-none d-lg-block"></div>
+    </div>
+{% endblock %}

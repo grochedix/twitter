@@ -1,14 +1,14 @@
 {% load humanize %}
 
 
-<div class="card" style="max-width: 99%;">
+<div class="card" style="max-width: 100%;">
     <div class="card-header">
       <a href="{% url 'account-detail' tweet.author.username %}" class="link-info" style="text-decoration: none;">
         <img src="{{tweet.author.profile.avatar.url}}" style="max-width: 30px; max-height: 30px;" class="rounded">  
         @{{tweet.author}}
       </a>
     </div>
-    <a href="{% url 'account-detail' tweet.author.username %}" class="detail-tweet">
+    <a href="{% url 'tweet-detail' tweet.id %}" class="detail-tweet">
     <div class="card-body">
       <blockquote class="blockquote mb-0">
         <p>{{tweet.content}}</p>
@@ -32,14 +32,69 @@
           
         </div>
           <div class="col-2"><i {% if tweet.like_exists %}class="bi bi-heart-fill text-danger"{% else %}class="bi bi-heart"{% endif %} id="{{tweet.id}}-like" style="cursor: pointer;"> {{tweet.likes.count|intcomma}}</i></div>
-          <div class="col-2"><i class="bi bi-chat-right" id="{{tweet.id}}-comment" tweet-id="{{tweet.id}}"> {{tweet.comments.count|intcomma}}</i></div>
+          <div class="col-2"><i class="bi bi-chat-right" id="{{tweet.id}}-comment" tweet-id="{{tweet.id}}" data-bs-toggle="modal" data-bs-target="#commentModal{{tweet.id}}" style="cursor: pointer;"> {{tweet.comments.count|intcomma}}</i></div>
           <div class="col-2"><i class="bi bi-arrow-counterclockwise" id="{{tweet.id}}-retweet" tweet-id="{{tweet.id}}"> {{tweet.retweets.count|intcomma}}</i></div>
       </div>
     </div>
-  
+
+
+    {% if request.user.is_authenticated %}
+    <div class="modal fade" id="commentModal{{tweet.id}}" tabindex="-1" aria-labelledby="commentModalLabel{{tweet.id}}" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="commentModalLabel{{tweet.id}}">Comment the tweet by {{tweet.author.username}}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form method="POST" id="form-comment-{{tweet.id}}">
+          <div class="modal-body">
+              {% csrf_token %}
+              <textarea id="content-comment-{{tweet.id}}" class="form-control" style="width: 100%;" maxlength="280" rows="5">
+              </textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Comment!</button>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
+    {% endif %}
 </div>
 {% if request.user.is_authenticated %}
   <script>
+    var commentModal = document.getElementById('commentModal{{tweet.id}}')
+    var commentInput = document.getElementById('content-comment-{{tweet.id}}')
+
+
+    commentModal.addEventListener('shown.bs.modal', function () {
+      commentInput.focus()
+    })
+
+    document.getElementById("form-comment-{{tweet.id}}").addEventListener('submit',
+      async (e) => {
+        e.preventDefault();
+        id = "{{tweet.id}}";
+        content = document.getElementById(`content-comment-${id}`).value;
+        await fetch(`/comment/${id}`, {
+            method: 'post',
+            mode: 'same-origin',
+            headers: django_ajax_headers,
+            body: JSON.stringify({
+              content:content,
+            })
+        }).then(function(response) {
+            return response.json();
+        }).then(function(data) { 
+            if (data["created"] === "t") {
+              window.location.replace("{% url 'tweet-detail' tweet.id %}")
+            }
+      }
+    )
+      })
+
+
     document.getElementById("{{tweet.id}}-like").addEventListener(
       'click', async () => {
         var id = "{{tweet.id}}";

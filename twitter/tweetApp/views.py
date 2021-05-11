@@ -1,16 +1,18 @@
-from django.contrib import messages
+import json
+
+from django.contrib import auth, messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count, Exists, OuterRef, Prefetch, Subquery, Q
+from django.db.models import Count, Exists, OuterRef, Prefetch, Q, Subquery
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.http import require_POST
-from django.views.generic import TemplateView
+from django.views.generic import DetailView, TemplateView
 
 from .forms import TweetForm
-from .models import Follow, Like, Retweet, Tweet
+from .models import Comment, Follow, Like, Retweet, Tweet
 
 
 def redirect_homepage(request):
@@ -82,6 +84,17 @@ class HomePageView(TemplateView):
             )
         return context
 
+class DetailTweetView(DetailView):
+    model=Tweet
+    queryset=Tweet.objects.all().prefetch_related(Prefetch('comments', queryset=Comment.objects.order_by('-date')),
+    'comments__author__profile', 'author__profile')
+    template_name='tweetApp/detail-tweet.html'
+
+    def get_queryset(self):
+        like = Like.objects.filter(tweet=OuterRef("pk"), user=self.request.user)
+        queryset=Tweet.objects.all().prefetch_related(Prefetch('comments', queryset=Comment.objects.order_by('-date')),
+        'comments__author__profile', 'author__profile').annotate(like_exists=Exists(like),)
+        return queryset
 
 @login_required
 @require_POST
@@ -99,8 +112,16 @@ def tweetView(request):
     )
     return redirect("home")
 
+@login_required
+@require_POST
+def commentView(request, id):
+    tweet = Tweet.objects.get(id=id)
+    content = json.loads(request.body).get("content")
+    Comment.objects.create(content=content, tweet=tweet, author=request.user)
+    return JsonResponse({"tweet": id, "created": "t"}, status=201)
 
 class AccountView(View):
+    @method_decorator(login_required)
     def get(self, request, username, *args, **kwargs):
         followed = get_user_model().objects.get(username=username)
         follow = Follow.objects.filter(followed=followed, follower=request.user)
@@ -156,3 +177,4 @@ def retweetView(request, id):
     tweet = Tweet.objects.get(id=id)
     retweet = Retweet.objects.create(author=request.user, tweet=tweet)
     return JsonResponse({"tweet": id, "created": "t"}, status=201)
+
