@@ -4,8 +4,8 @@
     <div class="card-header">
       <a href="{% url 'account-detail' comment.author.username %}" class="link-info" style="text-decoration: none;">
         <img src="{{comment.author.profile.avatar.url}}" style="max-width: 30px; max-height: 30px;" class="rounded">  
-        @{{comment.author}}
-      </a>
+        @{{comment.author}} 
+      </a> commented:
     </div>
     <div class="card-body">
       <blockquote class="blockquote mb-0">
@@ -18,7 +18,8 @@
     <div class="card-footer text-muted justify-content-between">
       <div class="row justify-content-between">
         <div class="col user-select-none">
-          {{comment.date|naturalday}} 
+          {{comment.date|naturaltime|title}} 
         </div>
           </div>
     </div>
+</div>

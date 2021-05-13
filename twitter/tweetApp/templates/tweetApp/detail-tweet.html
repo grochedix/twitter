@@ -1,13 +1,16 @@
 {% extends "tweetApp/base.html" %}
 
 {% block main %}
-    <div class="row" style="min-height: 100%; padding-top: 66px; max-width: 100%; --bs-gutter-x: 0;">
+    <div class="row overflow-hidden" style="height: 100%; padding-top: 66px; max-width: 100%; --bs-gutter-x: 0;">
      <div class="col d-none d-md-block"></div>
-        <div class="col-md-6 col-lg-4">
+        <div class="col-md-6 col-lg-4 overflow-hidden" style="height: 100%;">
             {% include "tweetApp/tweet.html" with tweet=object %}
-                {% for comment in object.comments.all %}
-                    {% include "tweetApp/comment.html" %}
-                {% endfor %}
+            <p class="h3" style="margin: 5px;">Comments:</p>
+            <div class="overflow-auto" style="height: 70%;">
+            {% for comment in object.comments.all %}
+                {% include "tweetApp/comment.html" %}
+            {% endfor %}
+            </div>
         </div>
      <div class="col d-none d-lg-block"></div>
     </div>
