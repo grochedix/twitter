@@ -1,0 +1,49 @@
+{% extends 'tweetApp/base.html' %}
+
+{% block main %}
+
+<div class="row" style="min-height: 100%; padding-top: 67px; max-width: 100%;">
+    <div class="col"></div>
+<div class="col-8">
+    <div class="row mx-auto">
+    {% if users and tweets %}
+    {% if users %}
+        <div class="col-md">
+        <p class="h3" style="margin: 5px;">People:</p>
+        {% for user in users %}
+        <div class="card shadow-sm" style="max-width: 99%; margin-top: 10px;">
+            <div class="card-header">
+                <a href="{% url 'account-detail' user.username %}" class="link-info" style="text-decoration: none;">
+                    <img src="{{user.profile.avatar.url}}" style="max-width: 30px; max-height: 30px;" class="rounded">  
+                    @{{user.username}},
+                </a> {{user.followers__count}} follower{{user.followers__count|pluralize}}
+                <form action="{% url 'account-detail' user.username %}" method="POST" style="float: right;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-primary btn-sm" >
+                        <i class="bi bi-bell-fill"> Follow</i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+    {% if tweets %}
+    <div class="col-md">
+        <p class="h3" style="margin: 5px;">Tweets:</p>
+    {% for tweet in tweets %}
+        {% include 'tweetApp/tweet.html' %}
+    {% endfor  %}
+    </div> 
+    {% endif %}
+    {% else %}
+        <div class="card" style="max-width: 95%;">
+            <div class="card-body position-relative">
+                <i class="bi bi-twitter ">Nothing to display, start a new research to find people to follow or tweets!</i>
+            </div>
+        </div>
+    {% endif %} 
+</div>
+</div>
+<div class="col"></div>
+{% endblock %}

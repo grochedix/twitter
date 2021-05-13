@@ -1,12 +1,11 @@
 {% extends "tweetApp/base.html" %}
 
 {% block main %}
-
     <div class="row" style="min-height: 100%; padding-top: 62px; max-width: 100%; --bs-gutter-x: 0;">
         <div class="col-lg overflow-auto" style="width: 100%; max-height: 60%; position: relative;">
             <div class="col-12 d-flex" style="min-height: 100px; padding-top: 20px; background-image: url('{{ account.profile.background.url }}'); background-size: cover; background-repeat: no-repeat; background-position: center center;  position: relative;">
                 <div class="container-fluid">
-                    <img src="{{ account.profile.avatar.url }}" class="img-thumbnail shadow" style="max-width: min(180px, 70%); max-height: 200px; position: relative; bottom: -35px; margin-left: 15px;">
+                    <img id="profilepicture" src="{{ account.profile.avatar.url }}" class="img-thumbnail shadow">
                 </div>
                 {% if account == request.user %}
                 <a href="{% url 'profile' %}" class="btn btn-primary shadow-sm" style="margin-right: 5px; max-height: 60px;">

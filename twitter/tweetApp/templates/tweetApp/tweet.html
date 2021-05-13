@@ -13,7 +13,7 @@
       <blockquote class="blockquote mb-0">
         <p>{{tweet.content}}</p>
         {% if tweet.image %}
-        <img src="{{tweet.image.url}}" style="max-height: 120px;" class="rounded mx-auto d-block">
+        <img src="{{tweet.image.url}}" class="tweet-image rounded mx-auto d-block">
         {% endif %}
         {% if tweet.retweet_author %}
           <div class="text-muted" ><small style="font-size: 15px;"><i class="bi bi-arrow-counterclockwise"></i>

@@ -3,6 +3,7 @@ import json
 from django.contrib import auth, messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import BadRequest
 from django.db.models import Count, Exists, OuterRef, Prefetch, Q, Subquery
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
@@ -56,25 +57,11 @@ class HomePageView(TemplateView):
                 )
                 .select_related("author", "author__profile")
                 .annotate(
-                    # comments__count=Count("comments", distinct=True),
-                    # likes__count=Count("likes", distinct=True),
-                    # retweets__count=Count("retweets", distinct=True),
                     like_exists=Exists(like),
                     retweet_author=Subquery(retweet_author[:1]),
                 )
                 .order_by("-date")[:100]
             )
-            # personnal_tweets = (
-            #     Tweet.objects.filter(author=user)
-            #     .select_related("author", "author__profile")
-            #     .annotate(
-            #         comments__count=Count("comments", distinct=True),
-            #         likes__count=Count("likes", distinct=True),
-            #         retweets__count=Count("retweets", distinct=True),
-            #         like_exists=Exists(like),
-            #     )
-            #     .order_by("-date")[:100]
-            # )
             context.update(
                 {
                     "tweet_form": TweetForm(),
@@ -84,17 +71,26 @@ class HomePageView(TemplateView):
             )
         return context
 
+
 class DetailTweetView(DetailView):
-    model=Tweet
-    queryset=Tweet.objects.all().prefetch_related(Prefetch('comments', queryset=Comment.objects.order_by('-date')),
-    'comments__author__profile', 'author__profile')
-    template_name='tweetApp/detail-tweet.html'
+    model = Tweet
+    template_name = "tweetApp/detail-tweet.html"
 
     def get_queryset(self):
         like = Like.objects.filter(tweet=OuterRef("pk"), user=self.request.user)
-        queryset=Tweet.objects.all().prefetch_related(Prefetch('comments', queryset=Comment.objects.order_by('-date')),
-        'comments__author__profile', 'author__profile').annotate(like_exists=Exists(like),)
+        queryset = (
+            Tweet.objects.all()
+            .prefetch_related(
+                Prefetch("comments", queryset=Comment.objects.order_by("-date")),
+                "comments__author__profile",
+                "author__profile",
+            )
+            .annotate(
+                like_exists=Exists(like),
+            )
+        )
         return queryset
+
 
 @login_required
 @require_POST
@@ -112,6 +108,7 @@ def tweetView(request):
     )
     return redirect("home")
 
+
 @login_required
 @require_POST
 def commentView(request, id):
@@ -119,6 +116,7 @@ def commentView(request, id):
     content = json.loads(request.body).get("content")
     Comment.objects.create(content=content, tweet=tweet, author=request.user)
     return JsonResponse({"tweet": id, "created": "t"}, status=201)
+
 
 class AccountView(View):
     @method_decorator(login_required)
@@ -142,7 +140,9 @@ class AccountView(View):
                 )
             )
             .annotate(
-                Count("followers"), Count("follows"), follow_exists=Exists(follow)
+                Count("followers", distinct=True),
+                Count("follows", distinct=True),
+                follow_exists=Exists(follow),
             )
             .get(username=username)
         )
@@ -178,5 +178,39 @@ def retweetView(request, id):
     retweet = Retweet.objects.create(author=request.user, tweet=tweet)
     return JsonResponse({"tweet": id, "created": "t"}, status=201)
 
+
 def searchView(request):
-    pass
+    search_param = request.GET.get("q", None)
+    try:
+        tweets = (
+            Tweet.objects.filter(content__icontains=search_param).prefetch_related(
+                Prefetch("comments", queryset=Comment.objects.order_by("-date")),
+                "comments__author__profile",
+                "author__profile",
+            )
+        )[:6]
+        users = (
+            get_user_model()
+            .objects.exclude(
+                Q(id=request.user.id)
+                | Q(followers__in=Follow.objects.filter(follower=request.user))
+            )
+            .filter(
+                Q(username__icontains=search_param)
+                | Q(first_name__icontains=search_param)
+                | Q(last_name__icontains=search_param)
+            )
+            .select_related("profile")
+            .annotate(Count("followers", distinct=True))
+            .order_by("-followers__count")[:10]
+        )
+        if request.user.is_authenticated:
+            like = Like.objects.filter(tweet=OuterRef("pk"), user=request.user)
+            tweets.annotate(
+                like_exists=Exists(like),
+            )
+    except:
+        raise BadRequest("Bad request for searching.")
+    return render(
+        request, "tweetApp/search_results.html", {"tweets": tweets, "users": users}
+    )

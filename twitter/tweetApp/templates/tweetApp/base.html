@@ -38,8 +38,8 @@
             <img src="{% static 'tweetApp/logo.png' %}" style="height: 30px;" alt="logo">
           </a>
           
-          <form class="d-none d-lg-flex" >
-            <input class="form-control me-2" type="search" placeholder="Search on Twitter..." aria-label="Search" >
+          <form class="d-none d-lg-flex" action="{% url 'search' %}">
+            <input class="form-control me-2" type="search" placeholder="Search on Twitter..." aria-label="Search" name="q" required>
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
           {% if user.is_authenticated %}

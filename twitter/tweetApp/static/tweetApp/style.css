@@ -1,4 +1,26 @@
 .detail-tweet, .detail-tweet:hover, .detail-tweet:visited, .detail-tweet:active {
     color: inherit;
     text-decoration: none;
-   }
+}
+
+.tweet-image {
+    height: 120px;
+    width: auto;
+    transition: height 2s;
+}
+.tweet-image:hover {
+    height: 250px;
+}
+#profilepicture {
+    max-width: min(400px, 70%);
+    max-height: 400px;
+    height: 200px;
+    width: auto;
+    position: relative;
+    bottom: -35px;
+    margin-left: 15px;
+    transition: height 2s;
+}
+#profilepicture:hover {
+    height: 250px;
+}
