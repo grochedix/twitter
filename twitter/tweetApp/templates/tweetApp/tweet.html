@@ -1,7 +1,7 @@
 {% load humanize %}
 
 
-<div class="card" style="max-width: 100%;">
+<div class="card shadow-sm" style="max-width: 99%;">
     <div class="card-header">
       <a href="{% url 'account-detail' tweet.author.username %}" class="link-info" style="text-decoration: none;">
         <img src="{{tweet.author.profile.avatar.url}}" style="max-width: 30px; max-height: 30px;" class="rounded">  
@@ -49,8 +49,7 @@
           <form method="POST" id="form-comment-{{tweet.id}}">
           <div class="modal-body">
               {% csrf_token %}
-              <textarea id="content-comment-{{tweet.id}}" class="form-control" style="width: 100%;" maxlength="280" rows="5">
-              </textarea>
+              <textarea id="content-comment-{{tweet.id}}" class="form-control" style="width: 100%;" maxlength="280" rows="5" placeholder="Comment..."></textarea>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

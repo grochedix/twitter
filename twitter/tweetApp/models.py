@@ -27,7 +27,6 @@ class Comment(models.Model):
     )
     tweet = models.ForeignKey(Tweet, on_delete=models.CASCADE, related_name="comments")
     content = models.CharField(max_length=280)
-    image = models.ImageField(upload_to="tweets/%Y/%m/%d/", blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
 
 

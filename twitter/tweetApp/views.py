@@ -178,3 +178,5 @@ def retweetView(request, id):
     retweet = Retweet.objects.create(author=request.user, tweet=tweet)
     return JsonResponse({"tweet": id, "created": "t"}, status=201)
 
+def searchView(request):
+    pass

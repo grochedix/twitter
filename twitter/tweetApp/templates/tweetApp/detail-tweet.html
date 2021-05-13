@@ -5,7 +5,9 @@
      <div class="col d-none d-md-block"></div>
         <div class="col-md-6 col-lg-4 overflow-hidden" style="height: 100%;">
             {% include "tweetApp/tweet.html" with tweet=object %}
+            {% if object.comments.all %}
             <p class="h3" style="margin: 5px;">Comments:</p>
+            {% endif %}
             <div class="overflow-auto" style="height: 70%;">
             {% for comment in object.comments.all %}
                 {% include "tweetApp/comment.html" %}
