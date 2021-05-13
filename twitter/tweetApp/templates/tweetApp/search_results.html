@@ -6,7 +6,7 @@
     <div class="col"></div>
 <div class="col-8">
     <div class="row mx-auto">
-    {% if users and tweets %}
+    {% if users or tweets %}
     {% if users %}
         <div class="col-md">
         <p class="h3" style="margin: 5px;">People:</p>
@@ -17,12 +17,14 @@
                     <img src="{{user.profile.avatar.url}}" style="max-width: 30px; max-height: 30px;" class="rounded">  
                     @{{user.username}},
                 </a> {{user.followers__count}} follower{{user.followers__count|pluralize}}
+                {% if request.user.is_authenticated %}
                 <form action="{% url 'account-detail' user.username %}" method="POST" style="float: right;">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-outline-primary btn-sm" >
                         <i class="bi bi-bell-fill"> Follow</i>
                     </button>
                 </form>
+                {% endif %}
             </div>
         </div>
         {% endfor %}

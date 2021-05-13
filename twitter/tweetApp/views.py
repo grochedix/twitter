@@ -182,35 +182,35 @@ def retweetView(request, id):
 def searchView(request):
     search_param = request.GET.get("q", None)
     try:
-        tweets = (
-            Tweet.objects.filter(content__icontains=search_param).prefetch_related(
-                Prefetch("comments", queryset=Comment.objects.order_by("-date")),
-                "comments__author__profile",
-                "author__profile",
-            )
-        )[:6]
+        tweets = Tweet.objects.filter(content__icontains=search_param).prefetch_related(
+            Prefetch("comments", queryset=Comment.objects.order_by("-date")),
+            "comments__author__profile",
+            "author__profile",
+        )
         users = (
             get_user_model()
-            .objects.exclude(
-                Q(id=request.user.id)
-                | Q(followers__in=Follow.objects.filter(follower=request.user))
-            )
-            .filter(
+            .objects.filter(
                 Q(username__icontains=search_param)
                 | Q(first_name__icontains=search_param)
                 | Q(last_name__icontains=search_param)
             )
             .select_related("profile")
             .annotate(Count("followers", distinct=True))
-            .order_by("-followers__count")[:10]
+            .order_by("-followers__count")
         )
         if request.user.is_authenticated:
             like = Like.objects.filter(tweet=OuterRef("pk"), user=request.user)
-            tweets.annotate(
+            tweets = tweets.annotate(
                 like_exists=Exists(like),
+            )
+            users = users.exclude(
+                Q(id=request.user.id)
+                | Q(followers__in=Follow.objects.filter(follower=request.user))
             )
     except:
         raise BadRequest("Bad request for searching.")
     return render(
-        request, "tweetApp/search_results.html", {"tweets": tweets, "users": users}
+        request,
+        "tweetApp/search_results.html",
+        {"tweets": tweets[:6], "users": users[:10]},
     )
