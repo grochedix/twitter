@@ -23,19 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', True)
+DEBUG = os.environ.get('DEBUG', 'debug')
 
-# SECURITY WARNING: keep the secret key used in production secret!
-if DEBUG:
-    SECRET_KEY = "django-insecure-(kbq%8lh^#%3z35jia-lus(b48p%*e(_bh3wyc4@*0znek(9@#"
-    DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
-else:
-    ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]', '.twitter-guillaume.com']
+ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]']
+
+# SECURITY WARNING: keep the secret key used in production secret!    
+if DEBUG == 'prod':
+    ALLOWED_HOSTS += ['.twitter-guillaume.com']
     
     SECRET_KEY = os.environ.get('SECRET_KEY')
 
@@ -47,6 +41,14 @@ else:
         'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST': os.environ.get('DB_HOST'),
         'PORT': '5432'
+        }
+    }
+else:
+    SECRET_KEY = "django-insecure-(kbq%8lh^#%3z35jia-lus(b48p%*e(_bh3wyc4@*0znek(9@#"
+    DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
         }
     }
 
