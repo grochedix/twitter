@@ -77,18 +77,16 @@ class DetailTweetView(DetailView):
     template_name = "tweetApp/detail-tweet.html"
 
     def get_queryset(self):
-        like = Like.objects.filter(tweet=OuterRef("pk"), user=self.request.user)
-        queryset = (
-            Tweet.objects.all()
-            .prefetch_related(
-                Prefetch("comments", queryset=Comment.objects.order_by("-date")),
-                "comments__author__profile",
-                "author__profile",
-            )
-            .annotate(
+        queryset = Tweet.objects.all().prefetch_related(
+            Prefetch("comments", queryset=Comment.objects.order_by("-date")),
+            "comments__author__profile",
+            "author__profile",
+        )
+        if self.request.user.is_authenticated:
+            like = Like.objects.filter(tweet=OuterRef("pk"), user=self.request.user)
+            queryset = queryset.annotate(
                 like_exists=Exists(like),
             )
-        )
         return queryset
 
 
