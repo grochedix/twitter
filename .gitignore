@@ -141,3 +141,5 @@ cython_debug/
 .media/
 media
 migrations/
+twitter/twitter/env.py
+.vscode/settings.json

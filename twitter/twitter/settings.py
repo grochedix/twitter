@@ -23,16 +23,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'debug')
+DEBUG = False
 
-ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]']
+ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]', '52.47.194.245']
 
 # SECURITY WARNING: keep the secret key used in production secret!    
-if DEBUG == 'prod':
+if DEBUG == False:
+    from .env import set_env_var
+    set_env_var(DEBUG)
     ALLOWED_HOSTS += ['.twitter-guillaume.com']
     
     SECRET_KEY = os.environ.get('SECRET_KEY')
-
     DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -43,6 +44,9 @@ if DEBUG == 'prod':
         'PORT': '5432'
         }
     }
+    # Time-out sessions
+    SESSION_COOKIE_AGE = 3600 * 24
+    SESSION_SAVE_EVERY_REQUEST = True
 else:
     SECRET_KEY = "django-insecure-(kbq%8lh^#%3z35jia-lus(b48p%*e(_bh3wyc4@*0znek(9@#"
     DATABASES = {
@@ -52,12 +56,7 @@ else:
         }
     }
 
-    CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_SECURE = True
 
-    # Time-out sessions
-    SESSION_COOKIE_AGE = 3600 * 24
-    SESSION_SAVE_EVERY_REQUEST = True
 
 
 
