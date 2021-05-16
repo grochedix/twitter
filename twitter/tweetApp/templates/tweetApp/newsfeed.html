@@ -1,5 +1,5 @@
-<div class="row" style="min-height: 100%; padding-top: 62px; max-width: 100%;">
-    <div class="col-md align-self-center" style="height: 100%;">
+<div class="row mt-md-5 pt-md-2" style="min-height: 100%; max-width: 100%;">
+    <div class="col-md align-self-center">
         <form class="border rounded shadow overflow-hidden" style="padding: 15px; max-width: 75%; margin: auto;" method="POST" action="{% url 'tweet' %}" enctype="multipart/form-data">
             {% csrf_token %}
             {{ tweet_form.non_field_errors }}
@@ -13,7 +13,7 @@
         </form>
     </div>
     <div class="col-md border border border-3 rounded-3 border-bottom-0 shadow-sm overflow-hidden" style="min-height: 100%; max-height: 100%; position: relative;">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <ul class="nav nav-tabs d-none d-md-block" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="newsfeed-tab" data-bs-toggle="tab" data-bs-target="#newsfeed" type="button" role="tab" aria-controls="newsfeed" aria-selected="true"><span class="lead text-info">Newsfeed</span></button>
             </li>
