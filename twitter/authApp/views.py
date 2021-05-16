@@ -1,13 +1,13 @@
 import json
 
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 from django.views.generic.edit import UpdateView
-from django.contrib import messages
 
 from .forms import ProfileForm
 

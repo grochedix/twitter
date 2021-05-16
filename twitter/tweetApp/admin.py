@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Comment, Follow, Like, Retweet, Tweet
+
+
+@admin.register(Tweet, Retweet, Comment, Like, Follow)
+class TweeterAdmin(admin.ModelAdmin):
+    pass
