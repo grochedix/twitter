@@ -1,8 +1,16 @@
 from django.urls import path
 
-from .views import (AccountView, DetailTweetView, HomePageView, commentView,
-                    likeView, redirect_homepage, retweetView, searchView,
-                    tweetView)
+from .views import (
+    AccountView,
+    DetailTweetView,
+    HomePageView,
+    commentView,
+    likeView,
+    redirect_homepage,
+    retweetView,
+    searchView,
+    tweetView,
+)
 
 urlpatterns = [
     path("home/", HomePageView.as_view(), name="home"),
